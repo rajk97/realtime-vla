@@ -1,0 +1,41 @@
+# --- Upstream clones (pinned in REPRODUCE.md, not vendored) ---
+openpi/
+lerobot/
+
+# --- Model checkpoints / large artifacts ---
+*.safetensors
+*.pt
+*.pth
+*.bin
+*.gguf
+*.onnx
+*.engine
+checkpoints/
+weights/
+data/
+datasets/
+
+# --- Profiler outputs ---
+*.nsys-rep
+*.qdrep
+*.ncu-rep
+*.sqlite
+profiles/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# --- Env / secrets ---
+.env
+*.local
+
+# --- OS / editor ---
+.DS_Store
+.vscode/
+.idea/
