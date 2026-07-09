@@ -20,4 +20,9 @@ Using vla conda environment
 - Why openpi is JAX: built on Google Gemma/PaliGemma (JAX heritage), TPU-first,
   training-oriented (jit/vmap/pmap). Not tuned for single-GPU low-latency inference —
   which is exactly why the PyTorch port exists and is the right base for this project.
-- Leaning: optimize LeRobot (PyTorch); keep openpi as correctness oracle. Not yet committed. 
+- Leaning: optimize LeRobot (PyTorch); keep openpi as correctness oracle. Not yet committed.
+
+## Went public (build-in-public)
+- Repo live: https://github.com/rajk97/realtime-vla (public).
+- Scaffolding: README.md, REPRODUCE.md (pinned upstream commits), .gitignore (excludes openpi/, lerobot/, checkpoints, profiles).
+- Accountability cadence: end every session by appending the current headline number here, then commit + push. 
