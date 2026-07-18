@@ -40,3 +40,8 @@ env/
 .vscode/
 .idea/
 scripts/
+
+# --- Private / local-only (never push) ---
+HANDOFF.*
+memory/
+.claude/
