@@ -56,6 +56,28 @@ Definition of done: LOG has VRAM@bf16 + "first inference ✓" + naive mean/worst
 
 ### HEADLINE (7/15): pi0_base naive = 216.6 ms mean / 221.2 ms worst (fp32, 4090). TTFA ~217 ms.
 
+---
+
+## Phase 1 — latency anatomy (7/18)
+Coarse method-level waterfall via CUDA events (no Nsight yet). Synthetic batch,
+fp32, 10 runs drop 2 warmup. Tool: `benchmarks/latency_waterfall.py`.
+
+| stage        | mean ms | % total | what it is |
+|---|---|---|---|
+| preprocess   |   0.1 |  0% | resize/pad/normalize images |
+| embed_prefix |  31.7 | 15% | SigLIP vision encode + language embed |
+| prefill      |  97.0 | 45% | one PaliGemma pass over prefix, builds KV cache |
+| denoise      |  83.9 | 39% | 10-step flow loop (8.4 ms/step × 10) |
+| overhead     |   1.8 |  1% | Python / launches / transfers |
+| **total**    | 214.4 | — | |
+
+Key finding: **prefill dominates, not the denoise loop.** Reframes Phase 2
+priority by evidence: prefill (backbone prefill lever — note attn forced to
+`eager`, no flash) → denoise (CUDA graphs over 10 identical steps + the
+per-step `clone_past_key_values` tax) → vision (compute-bound ViT).
+
+### HEADLINE (7/18): pi0_base anatomy — prefill 97ms (45%) is the biggest cost, NOT the denoise loop (84ms/39%, 8.4ms×10). Vision 32ms (15%). Tool: benchmarks/latency_waterfall.py.
+
 ### Env notes (7/14)
 - Env: fresh conda `vla` @ Python 3.12 (lerobot 0.6.1 requires >=3.12; old 3.10 env removed).
 - lerobot installed editable with `.[pi]` extra.
